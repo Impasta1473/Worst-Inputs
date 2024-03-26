@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>index</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+	<style>
+		.stamp {
+			position: absolute;
+			pointer-events: none;
+		}
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+
+<body><center>
+<h1>Worst String Inputs Ever</h1>
+	<nav id='menu'>
+  <input type='checkbox' id='responsive-menu' onclick='updatemenu()'><label></label>
+  <ul>
+    <li><a href='index.html'>About</a></li>
+    <li><a class='dropdown-arrow' href='blahblah'>Basic</a>
+      <ul class='sub-menus'>
+        <li><a href='basic1.html'>ABCDEF</a></li>
+        <li><a href='basic2.html'>Unrelilable</a></li>
+        <li><a href='basic3.html'>Two Buttons</a></li>
+        <li><a href='basic4.html'>Binary</a></li>
+        <li><a href='basic5.html'>H</a></li>
+      </ul>
+    </li>
+    <li><a class='dropdown-arrow' href='blahlblah'>Luck Based</a>
+      <ul class='sub-menus'>
+        <li><a href='luck1.html'>26 Sided Dice</a></li>
+        <li><a href='luck2.html'>Minutes</a></li>
+        <li><a href='luck3.html'>Half Chance</a></li>
+        <li><a href='luck4.html'>5% Clear</a></li>
+        <li><a href='luck5.html'>Gibberish</a></li>
+      </ul>
+    </li>
+    <li><a class='dropdown-arrow' href='blahblah'>MISC</a>
+      <ul class='sub-menus'>
+        <li><a href='misc1.html'>RPS Chooses</a></li>
+        <li><a href='misc2.html'>Paranoid</a></li>
+        <li><a href='misc3.html'>Pong</a></li>
+        <li><a href='misc4.html'>Math</a></li>
+        <li><a href='misc5.html'>Location-Wise</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	<br><br><hr width="95%"><br><br>
+	Input: <input type="text" id="inputid" readonly><br><br>
+	<canvas id="pong" width="600%", height="400%"></canvas>
+	<br>
+	</center><script>
+	const canvas = document.getElementById("pong");
+	let ballX = canvas.width / 2;
+	let ballY = canvas.height / 2;
+	let ballSX = 5;
+	let ballSY = 2;
+	let speed = 0;
+	const ctx = canvas.getContext("2d");
+	let paddleY = (canvas.height - 75) / 2;
+	let mouseY;
+	let won = false;
+	let lost = false;
+	let started = false;
+	let aiPaddleY = (canvas.height - 75) / 2;
+	let aiTarget = aiPaddleY;
+	let goesUp = false;
+	let ballSpeed = 7;
+	setInterval(setT,(Math.random() * 500) + 100);
+	function setT(){
+		if (ballY < aiPaddleY + 75 / 2) {
+			goesUp = false;
+		} else {
+			goesUp = true;
+		}
+	}
+	function update(){
+		if (!started) return;
+		let target = mouseY - 75 / 2;
+		speed = Math.min(ballSpeed, Math.max(-ballSpeed, target - paddleY));
+		paddleY = mouseY;
+		paddleY = Math.min(canvas.height - 75, Math.max(0,paddleY));
+		ballX += ballSX;
+		ballY += ballSY;
+		if (goesUp){
+			aiPaddleY += ballSpeed;
+		} else {
+			aiPaddleY -= ballSpeed;
+		}
+		aiPaddleY = Math.min(canvas.height - 75, Math.max(0,aiPaddleY));
+		if (ballY - 20 / 2 < 0|| ballY + 20 / 2 > canvas.height){
+			ballSY = -ballSY;
+		}
+		if ((ballX - 20 / 2 < 20 && ballY > paddleY && ballY < paddleY + 75) || (ballX + 20 / 2 > canvas.width - 20 && ballY > aiPaddleY && ballY < aiPaddleY + 75)){
+			ballSX = -ballSX;
+		}
+		const aiPaddleCenter = aiPaddleY + 75 / 2;
+		if (ballX + 20 / 2 > canvas.width){
+			playerWins();
+			won = true;
+		} else if (ballX - 20 / 2 < 0){
+			aiWins();
+			lost = true;
+		}
+	}
+	function draw(){
+		ctx.clearRect(0,0, canvas.width, canvas.height);
+		ctx.fillStyle = "#000";
+		ctx.fillRect(10,paddleY,20, 75);
+		ctx.fillRect(canvas.width - 30, aiPaddleY, 20, 75);
+		ctx.beginPath();
+		ctx.arc(ballX, ballY, 20 / 2, 0, Math.PI * 2);
+		ctx.fill();
+		ctx.closePath();
+	}
+	function handleMouse(event){
+		const rect = canvas.getBoundingClientRect();
+		mouseY = event.clientY - rect.top - 75 / 2;
+		paddleY = Math.min(canvas.height - 75, Math.max(0, mouseY));
+	}
+	let aiWinCount = 0;
+	function playerWins(){
+		aiWinCount = 0;
+		const input = prompt("You win! Enter one character:");
+		if (input !== null){
+			document.getElementById("inputid").value += input.charAt(0);
+		}
+		const winOuts = [
+			"Dang it!",
+			"Y U BEAT ME",
+			"Bruh",
+			"I Hate You",
+			"Step On A Lego",
+			"NO!!!",
+			"WHYYYYYY",
+			"GAH",
+			"LEMME WIN PLS"
+		]
+		console.log(winOuts[Math.floor(Math.random() * 8) + 1]);
+		reset();
+	}
+	function aiWins(){
+		const loseOuts = [
+			"Yes!",
+			"That's TWO, Loser!",
+			"Three Strikes, I Get To Delete! :)",
+			"Too EZ!",
+			"That's FIVE! Time To Clear! >:)",
+			"Six!!!",
+			"SEVEN LOSSES YOU'RE OUT! >:D"
+		]
+		const randChar = String.fromCharCode(Math.floor(Math.random() * 65535));
+		document.getElementById("inputid").value += randChar;
+		aiWinCount++;
+		console.log(loseOuts[aiWinCount - 1]);
+		if (aiWinCount === 3){
+			document.getElementById("inputid").value = document.getElementById("inputid").value.slice(0,-1);
+			document.getElementById("inputid").value = document.getElementById("inputid").value.slice(0,-1);
+		}
+		if (aiWinCount === 5){
+			document.getElementById("inputid").value = "";
+		}
+		if (aiWinCount === 7){
+			alert("ur bad lol");
+			location.reload();
+		}
+		reset();
+	}
+	function handleClick(){
+		if (!started){
+			started = true;
+			aiTarget = ballY;
+			let direction = Math.floor(Math.random() * 2);
+			switch (direction) {
+				case 0:
+					ballSX = -7;
+					ballSY = -7;
+					break;
+				case 1:
+					ballSX = -7;
+					ballSY = 7;
+					break;
+			}
+		}
+	}
+	function reset(){
+		started = false;
+		ballX = canvas.width / 2;
+		ballY = canvas.height / 2;
+		paddleY = (canvas.height - 75) / 2;
+		aiPaddleY = (canvas.height - 75) / 2;
+	}
+	canvas.addEventListener("mousemove", handleMouse);
+	canvas.addEventListener("click", handleClick);
+	function loop(){
+		update();
+		draw();
+		requestAnimationFrame(loop);
+	}
+	loop();
+	</script></body>
+</html>

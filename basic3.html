@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>index</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body><center>
+<h1>Worst String Inputs Ever</h1>
+	<nav id='menu'>
+  <input type='checkbox' id='responsive-menu' onclick='updatemenu()'><label></label>
+  <ul>
+    <li><a href='index.html'>About</a></li>
+    <li><a class='dropdown-arrow' href='blahblah'>Basic</a>
+      <ul class='sub-menus'>
+        <li><a href='basic1.html'>ABCDEF</a></li>
+        <li><a href='basic2.html'>Unrelilable</a></li>
+        <li><a href='basic3.html'>Two Buttons</a></li>
+        <li><a href='basic4.html'>Binary</a></li>
+        <li><a href='basic5.html'>H</a></li>
+      </ul>
+    </li>
+    <li><a class='dropdown-arrow' href='blahlblah'>Luck Based</a>
+      <ul class='sub-menus'>
+        <li><a href='luck1.html'>26 Sided Dice</a></li>
+        <li><a href='luck2.html'>Minutes</a></li>
+        <li><a href='luck3.html'>Half Chance</a></li>
+        <li><a href='luck4.html'>5% Clear</a></li>
+        <li><a href='luck5.html'>Gibberish</a></li>
+      </ul>
+    </li>
+    <li><a class='dropdown-arrow' href='blahblah'>MISC</a>
+      <ul class='sub-menus'>
+        <li><a href='misc1.html'>RPS Chooses</a></li>
+        <li><a href='misc2.html'>Paranoid</a></li>
+        <li><a href='misc3.html'>Pong</a></li>
+        <li><a href='misc4.html'>Math</a></li>
+        <li><a href='misc5.html'>Location-Wise</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	<br><br><hr width="95%">
+	<p><br>
+	<br>Input: <input type="text" id="inputid" readonly>
+	</p>
+	<p> &nbsp;
+		<button onclick="select()" id="select">A</button>
+&nbsp;
+	  &nbsp;
+	  &nbsp;
+	  &nbsp;
+<button onclick="confirm()" id="confirm">GO</button>
+  </p>
+	
+	</center><script>
+		function updatemenu() {
+  if (document.getElementById('responsive-menu').checked == true) {
+    document.getElementById('menu').style.borderBottomRightRadius = '0';
+    document.getElementById('menu').style.borderBottomLeftRadius = '0';
+  }else{
+    document.getElementById('menu').style.borderRadius = '0px';
+  }
+}
+	</script><script>
+	let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuxwxyz1234567890.,&/!?-:< ";
+	let index = 0;
+	let txt = document.getElementById('inputid');
+	function select(){
+		index = (index + 1) % chars.length;
+		document.getElementsByTagName('button')[0].innerHTML = chars[index];
+	}
+	function confirm(){
+		let selected = chars[index];
+		if (selected === '<'){
+			let current = txt.value;
+			txt.value = current.slice(0, -1);
+		} else {
+			txt.value += selected;
+		}
+	}
+	</script></body>
+</html>
